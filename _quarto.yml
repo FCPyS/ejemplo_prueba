@@ -5,10 +5,16 @@ project:
 website:
   title: "ejemplo_prueba"
   navbar:
+    background: "#B4EEB4"
+    foreground: "#8FBC8F"
+    search: true
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: about.qmd
+        text: Sobre la página
+      - href: hola.qmd
+        text: holaaa
 
 format:
   html:

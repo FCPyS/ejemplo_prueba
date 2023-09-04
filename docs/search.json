@@ -1,16 +1,16 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "ejemplo_prueba",
-    "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
-  },
-  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
     "section": "",
     "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Familiarización con quarto",
+    "section": "",
+    "text": "Hola, Mundo! Mi nombre es Canek y en ésta ocasión hago uso de esta página web para aprender algunos de los fundamentos de quarto y tmarkdown :). 😊\nQuarto es muy generoso y nos da algunas herramientas básicas para entender su lógica: https://quarto.org/docs/websites.\n![quartologo](imagenes/quartologo.jpeg)"
   }
 ]
