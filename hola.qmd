@@ -1,4 +1,125 @@
 ---
-title: "Hola"
+title: "Ejemplo de práctica"
 backgroundcolor: "#EEEEE0"
+image: "imagenes/quartologo.jpeg"
 ---
+
+Éste es un ejemplo de una práctica en R.
+
+Usaremos de ejemplo la Encuesta Nacional sobre Creencias y Prácticas Religiosas en México (ENCREER/RIFREM) de 2016
+
+[Encuesta](https://rifrem.mx/encreer/wp-content/themes/encreer/docs/EncuestaNacionalCreenciasyPracticasReligiosasMX_Oct2017_ESP.pdf)
+
+<iframe src= "https://rifrem.mx/encreer/wp-content/themes/encreer/docs/EncuestaNacionalCreenciasyPracticasReligiosasMX_Oct2017_ESP.pdf" width= "1000" height="600"></iframe>
+
+Primero cargamos los paquetes:
+
+```{r echo=TRUE}
+if (!require("pacman")) install.packages("pacman") 
+pacman::p_load(tidyverse, 
+               readxl,writexl,googlesheets4, 
+               haven, foreign, 
+               sjlabelled, 
+               janitor, skimr, 
+               curl) 
+```
+
+Cargamos nuestra base de datos:
+
+```{r}
+encreer<- haven::read_sav("bases/ENCREER_RIFREM.sav")
+```
+
+```{r echo=TRUE}
+class(encreer)
+names(encreer)
+```
+
+La basee posee variables nombradas con mayúsculas y tildes, lo cual complica su manejo, por lo que es necesario darle un formato
+
+más amigable.
+
+```{r echo=TRUE}
+#Usamos la función "clean names" del paquete janitor
+encreer<-janitor::clean_names(encreer)
+names(encreer)
+```
+
+¡Seleccionemos una variable!
+
+```{r echo=TRUE}
+print(get_label(encreer$v19h))
+print(get_labels(encreer$v19h))
+class(encreer$v19h)
+table(encreer$v19h)
+```
+
+Nuestra variable se sustenta (y responde) a la pregunta "¿Cree usted que existe el Diablo?". A continuación etiquetaremos los valores
+
+de la variable para posteriormente graficarla.
+
+```{r echo=TRUE}
+encreer<- encreer %>% 
+  mutate(v19b=as_numeric(v19h)) %>% 
+  sjlabelled::set_labels(v19h, labels=c("si", "no")) 
+
+encreer %>% 
+with(table(as_label(v19h)))
+
+subset1<- encreer %>% 
+  as_label(v19h)
+```
+
+Gráfica:
+
+```{r echo=TRUE}
+library(ggplot2)
+
+ggplot(subset1) +
+  aes(x = v19h) +
+  geom_bar(fill = "#729472") +
+  labs(
+    x = "Valores",
+    y = "Frecuencia",
+    title = "¿Cree usted que existe el Diablo?"
+  ) +
+  theme_minimal()
+```
+
+Combinemos nuestra variable con otra que podría correlacionarse:
+
+```{r echo=TRUE}
+#En éste caso usaremos la varaible que responde a la pregunta ¿Cree usted que existe Dios o un Ser Supremo?
+print(get_label(encreer$v19a))
+print(get_labels(encreer$v19a))
+class(encreer$v19a)
+table(encreer$v19a)
+
+```
+
+```{r echo=TRUE}
+encreer<- encreer %>% 
+  mutate(v19b=as_factor(v19a)) %>% 
+  sjlabelled::set_labels(v19a, labels=c("si", "no")) 
+subset1<- encreer %>% 
+  as_label(v19h) %>% 
+  as_label(v19a)
+```
+
+Gráfico bivariado
+
+```{r echo=TRUE}
+ggplot(subset1) +
+  aes(x = v19h, fill=v19a) +
+  geom_bar() +
+  labs(
+    x = "Valores",
+    y = "Frecuencia",
+    title = "¿Cree usted que existe el Diablo?"
+  ) +
+  theme_minimal()
+```
+
+Podemos observar que en ambos casos, ya sea entre creyentes o no creyentes en la existencia del diablo, prevalece una creencia en un Dios supremo. Sin embargo, es interesante notar que la mayoría de los no creyentes en el diablo también son no creyentes en un Dios supremo. Esto puede explicarse debido a que el grupo de ateos está incluido en aquellos que no creen ni en un Dios supremo ni en el diablo.
+
+Además, es notable que la dicotomía entre el bien y el mal, representada por la creencia en Dios y el diablo, no es tan pronunciada en este caso. Muchos creyentes en un Dios Supremo han dejado de lado la creencia en el diablo, a pesar de que durante mucho tiempo sirvió como un argumento para mantener la fe. También es importante señalar que no estamos considerando a las religiones no judeocristianas, las cuales, por definición, no creen en el diablo (al menos en su concepción popular).

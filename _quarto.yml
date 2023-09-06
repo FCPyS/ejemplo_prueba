@@ -3,7 +3,8 @@ project:
   output-dir: "docs"
 
 website:
-  title: "ejemplo_prueba"
+  title: "Experimento"
+  
   navbar:
     background: "#B4EEB4"
     foreground: "#8FBC8F"
@@ -21,6 +22,7 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+    fontcolor: "#1c6f95"
 
 editor: visual
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ejemplo_prueba - Hola</title>
+<title>Experimento - Ejemplo de práctica</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -71,7 +105,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">ejemplo_prueba</span>
+    <span class="navbar-title">Experimento</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -111,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Hola</h1>
+<h1 class="title">Ejemplo de práctica</h1>
 </div>
 
 
@@ -126,6 +160,203 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>Éste es un ejemplo de una práctica en R.</p>
+<p>Usaremos de ejemplo la Encuesta Nacional sobre Creencias y Prácticas Religiosas en México (ENCREER/RIFREM) de 2016</p>
+<p><a href="https://rifrem.mx/encreer/wp-content/themes/encreer/docs/EncuestaNacionalCreenciasyPracticasReligiosasMX_Oct2017_ESP.pdf">Encuesta</a></p>
+<iframe src="https://rifrem.mx/encreer/wp-content/themes/encreer/docs/EncuestaNacionalCreenciasyPracticasReligiosasMX_Oct2017_ESP.pdf" width="1000" height="600">
+</iframe>
+<p>Primero cargamos los paquetes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"pacman"</span>)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: pacman</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'pacman' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>               readxl,writexl,googlesheets4, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>               haven, foreign, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>               sjlabelled, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>               janitor, skimr, </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>               curl) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Cargamos nuestra base de datos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>encreer<span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sav</span>(<span class="st">"bases/ENCREER_RIFREM.sav"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(encreer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "tbl_df"     "tbl"        "data.frame"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(encreer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "FOLIO"           "FECHA"           "HR_INICIO"       "HR_TERMINO"     
+ [5] "GRUPO_RELIGIOSO" "REGION"          "ESTADO"          "MUNICIPIO"      
+ [9] "AGEB"            "MANZANA"         "TIPO_POBLACIÓN"  "RECHAZOS"       
+[13] "INCOMPLETOS"     "NO_ELEGIBLE"     "NO_CONTACTO"     "V01"            
+[17] "V02"             "V02_Otra"        "V03b_CODIGO"     "V04"            
+[21] "V05b_CODIGO"     "V06"             "V06_Otra"        "V07"            
+[25] "V08"             "V08_Otra"        "V09"             "V10c_GRUPO"     
+[29] "V11"             "V12"             "V12_Otra"        "V13a"           
+[33] "V13b"            "V13c"            "V13c_Otros"      "V14"            
+[37] "V15"             "V15_FAM"         "V15_Otros"       "V16a"           
+[41] "V16b"            "V16c"            "V16d"            "V16e"           
+[45] "V16f"            "V16g"            "V16h"            "V16i"           
+[49] "V17"             "V18a_CODIGO"     "V18b_CODIGO"     "V18c_CODIGO"    
+[53] "V19a"            "V19b"            "V19c"            "V19d"           
+[57] "V19e"            "V19f"            "V19g"            "V19h"           
+[61] "V19i"            "V20"             "V21a"            "V21b"           
+[65] "V21c"            "V21d"            "V21e"            "V21f"           
+[69] "V21g"            "V21h"            "V21i"            "V21j"           
+[73] "V21k"            "V21l"            "V21m"            "V22"            
+[77] "V23"             "V24"             "V25"             "POBIND"         
+[81] "V26"             "V27"             "V28"             "V28_Otra"       
+[85] "V29"             "V30a"            "V30b"            "V30c"           
+[89] "V30d"            "V31a"            "V31b"            "V31c"           
+[93] "V31d"            "NSE"             "POND"            "R_EDAD"         
+[97] "R_ESCOLARIDAD"  </code></pre>
+</div>
+</div>
+<p>La basee posee variables nombradas con mayúsculas y tildes, lo cual complica su manejo, por lo que es necesario darle un formato</p>
+<p>más amigable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Usamos la función "clean names" del paquete janitor</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>encreer<span class="ot">&lt;-</span>janitor<span class="sc">::</span><span class="fu">clean_names</span>(encreer)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(encreer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "folio"           "fecha"           "hr_inicio"       "hr_termino"     
+ [5] "grupo_religioso" "region"          "estado"          "municipio"      
+ [9] "ageb"            "manzana"         "tipo_poblacion"  "rechazos"       
+[13] "incompletos"     "no_elegible"     "no_contacto"     "v01"            
+[17] "v02"             "v02_otra"        "v03b_codigo"     "v04"            
+[21] "v05b_codigo"     "v06"             "v06_otra"        "v07"            
+[25] "v08"             "v08_otra"        "v09"             "v10c_grupo"     
+[29] "v11"             "v12"             "v12_otra"        "v13a"           
+[33] "v13b"            "v13c"            "v13c_otros"      "v14"            
+[37] "v15"             "v15_fam"         "v15_otros"       "v16a"           
+[41] "v16b"            "v16c"            "v16d"            "v16e"           
+[45] "v16f"            "v16g"            "v16h"            "v16i"           
+[49] "v17"             "v18a_codigo"     "v18b_codigo"     "v18c_codigo"    
+[53] "v19a"            "v19b"            "v19c"            "v19d"           
+[57] "v19e"            "v19f"            "v19g"            "v19h"           
+[61] "v19i"            "v20"             "v21a"            "v21b"           
+[65] "v21c"            "v21d"            "v21e"            "v21f"           
+[69] "v21g"            "v21h"            "v21i"            "v21j"           
+[73] "v21k"            "v21l"            "v21m"            "v22"            
+[77] "v23"             "v24"             "v25"             "pobind"         
+[81] "v26"             "v27"             "v28"             "v28_otra"       
+[85] "v29"             "v30a"            "v30b"            "v30c"           
+[89] "v30d"            "v31a"            "v31b"            "v31c"           
+[93] "v31d"            "nse"             "pond"            "r_edad"         
+[97] "r_escolaridad"  </code></pre>
+</div>
+</div>
+<p>¡Seleccionemos una variable!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">get_label</span>(encreer<span class="sc">$</span>v19h))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "¿Cree usted que existe el Diablo?"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">get_labels</span>(encreer<span class="sc">$</span>v19h))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "No sabría opinar/ No contestó" "Sí"                           
+[3] "No"                           </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(encreer<span class="sc">$</span>v19h)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "haven_labelled" "vctrs_vctr"     "double"        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(encreer<span class="sc">$</span>v19h)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   1    2 
+1636 1264 </code></pre>
+</div>
+</div>
+<p>Nuestra variable se sustenta (y responde) a la pregunta “¿Cree usted que existe el Diablo?”. A continuación etiquetaremos los valores</p>
+<p>de la variable para posteriormente graficarla.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>encreer<span class="ot">&lt;-</span> encreer <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">v19b=</span><span class="fu">as_numeric</span>(v19h)) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  sjlabelled<span class="sc">::</span><span class="fu">set_labels</span>(v19h, <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"si"</span>, <span class="st">"no"</span>)) </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>encreer <span class="sc">%&gt;%</span> </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(<span class="fu">table</span>(<span class="fu">as_label</span>(v19h)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  si   no 
+1636 1264 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>subset1<span class="ot">&lt;-</span> encreer <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_label</span>(v19h)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Gráfica:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(subset1) <span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> v19h) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill =</span> <span class="st">"#729472"</span>) <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Valores"</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Frecuencia"</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"¿Cree usted que existe el Diablo?"</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="hola_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Combinemos nuestra variable con otra que podría correlacionarse:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#En éste caso usaremos la varaible que responde a la pregunta ¿Cree usted que existe Dios o un Ser Supremo?</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">get_label</span>(encreer<span class="sc">$</span>v19a))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "¿Cree usted que existe Dios o un Ser Supremo?"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">get_labels</span>(encreer<span class="sc">$</span>v19a))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "No sabría opinar/ No contestó" "Sí"                           
+[3] "No"                           </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(encreer<span class="sc">$</span>v19a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "haven_labelled" "vctrs_vctr"     "double"        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(encreer<span class="sc">$</span>v19a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   1    2 
+2827  130 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>encreer<span class="ot">&lt;-</span> encreer <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">v19b=</span><span class="fu">as_factor</span>(v19a)) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  sjlabelled<span class="sc">::</span><span class="fu">set_labels</span>(v19a, <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"si"</span>, <span class="st">"no"</span>)) </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>subset1<span class="ot">&lt;-</span> encreer <span class="sc">%&gt;%</span> </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_label</span>(v19h) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_label</span>(v19a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Gráfico bivariado</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(subset1) <span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> v19h, <span class="at">fill=</span>v19a) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Valores"</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Frecuencia"</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"¿Cree usted que existe el Diablo?"</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="hola_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Podemos observar que en ambos casos, ya sea entre creyentes o no creyentes en la existencia del diablo, prevalece una creencia en un Dios supremo. Sin embargo, es interesante notar que la mayoría de los no creyentes en el diablo también son no creyentes en un Dios supremo. Esto puede explicarse debido a que el grupo de ateos está incluido en aquellos que no creen ni en un Dios supremo ni en el diablo.</p>
+<p>Además, es notable que la dicotomía entre el bien y el mal, representada por la creencia en Dios y el diablo, no es tan pronunciada en este caso. Muchos creyentes en un Dios Supremo han dejado de lado la creencia en el diablo, a pesar de que durante mucho tiempo sirvió como un argumento para mantener la fe. También es importante señalar que no estamos considerando a las religiones no judeocristianas, las cuales, por definición, no creen en el diablo (al menos en su concepción popular).</p>
 
 
 
